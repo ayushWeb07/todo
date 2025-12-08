@@ -61,23 +61,23 @@ const handleAddTodo = async (data) => {
   }
 };
 
-
 // *toggle todo status
 const handleToggleTodoStatus = async (data) => {
   try {
     const { todoId, completed } = data;
 
-    const res = await fetch(`http://localhost:8080/api/v1/todos/toggle-status/${todoId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ completed }),
-    });
+    const res = await fetch(
+      `http://localhost:8080/api/v1/todos/toggle-status/${todoId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ completed }),
+      }
+    );
 
     const apiData = await res.json();
-
-
 
     if (apiData?.isSuccess) {
       return {
@@ -85,18 +85,18 @@ const handleToggleTodoStatus = async (data) => {
         message: apiData?.message,
         data: apiData?.data?.todo,
       };
-    } 
+    }
   } catch (error) {
     const apiData = error?.response?.data;
 
     return {
       success: apiData?.isSuccess || false,
       message:
-        `${apiData?.message}` || `Something went wrong while toggling the todo status.`,
+        `${apiData?.message}` ||
+        `Something went wrong while toggling the todo status.`,
     };
   }
 };
-
 
 // *delete todo
 const handleDeleteTodo = async (data) => {
@@ -109,6 +109,39 @@ const handleDeleteTodo = async (data) => {
 
     const apiData = await res.json();
 
+    if (apiData?.isSuccess) {
+      return {
+        success: apiData?.isSuccess,
+        message: apiData?.message,
+        data: apiData?.data?.todo,
+      };
+    }
+  } catch (error) {
+    const apiData = error?.response?.data;
+
+    return {
+      success: apiData?.isSuccess || false,
+      message:
+        `${apiData?.message}` ||
+        `Something went wrong while deleting the todo.`,
+    };
+  }
+};
+
+// edit todo details
+const handleEditTodoDetails = async (data) => {
+  try {
+    const { todoId, title, description, priority } = data;
+
+    const res = await fetch(`http://localhost:8080/api/v1/todos/${todoId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title, description, priority }),
+    });
+
+    const apiData = await res.json();
 
     if (apiData?.isSuccess) {
       return {
@@ -116,16 +149,17 @@ const handleDeleteTodo = async (data) => {
         message: apiData?.message,
         data: apiData?.data?.todo,
       };
-    } 
+    }
   } catch (error) {
     const apiData = error?.response?.data;
 
     return {
       success: apiData?.isSuccess || false,
       message:
-        `${apiData?.message}` || `Something went wrong while deleting the todo.`,
+        `${apiData?.message}` ||
+        `Something went wrong while editing the todo details.`,
     };
   }
 };
 
-export { handleAddTodo, handleToggleTodoStatus, handleDeleteTodo };
+export { handleAddTodo, handleToggleTodoStatus, handleDeleteTodo, handleEditTodoDetails };

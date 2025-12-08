@@ -42,10 +42,16 @@ const useTodoStore = create(
           ),
         })),
 
-
       deleteTodo: (id) =>
         set((state) => ({
-          todos: state?.todos?.filter((t) => t?._id !== id)
+          todos: state?.todos?.filter((t) => t?._id !== id),
+        })),
+
+      editTodoDetails: (id, title, description, priority) =>
+        set((state) => ({
+          todos: state?.todos?.map((t) =>
+            t?._id !== id ? t : { ...t, title, description, priority }
+          ),
         })),
     }),
     {

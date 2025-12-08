@@ -16,8 +16,8 @@ const TodosList = () => {
 
     const filteredTodos = useMemo(() => {
         return todos.filter(todo => {
-            if (filter === "completed") return todo.completed;
-            if (filter === "pending") return !todo.completed;
+            if (filter === "completed") return todo?.completed;
+            if (filter === "pending") return !todo?.completed;
             return true;
         });
     }, [todos, filter]);
